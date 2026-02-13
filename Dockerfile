@@ -42,7 +42,7 @@ COPY app ./app
 RUN npm run build
 
 # --- Stage 3: Final Production Image ---
-FROM php:8.3-cli-alpine
+FROM php:8.4-cli-alpine
 
 # Use the highly optimized extension installer (fetches pre-built binaries)
 COPY --from=mlocati/php-extension-installer /usr/bin/install-php-extensions /usr/local/bin/
