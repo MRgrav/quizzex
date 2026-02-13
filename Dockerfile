@@ -66,7 +66,7 @@ RUN install-php-extensions \
     exif
 
 # Install RoadRunner Binary (Zero compilation time)
-COPY --from=ghcr.io/roadrunner-server/roadrunner:2023 /usr/bin/rr /usr/local/bin/rr
+COPY --from=ghcr.io/roadrunner-server/roadrunner:2024.3 /usr/bin/rr /usr/local/bin/rr
 
 WORKDIR /app
 
@@ -80,10 +80,12 @@ COPY --from=composer /app/vendor ./vendor
 COPY . .
 
 # Setup Directories & Permissions
-RUN mkdir -p storage/framework/{sessions,views,cache} storage/logs bootstrap/cache \
+# Place rr binary where Octane looks for it: ./rr AND vendor/bin/rr
+RUN mkdir -p storage/framework/{sessions,views,cache} storage/logs bootstrap/cache vendor/bin \
     && chmod -R 775 storage bootstrap/cache \
-    && ln -s /usr/local/bin/rr /app/rr \
-    && chmod +x /usr/local/bin/entrypoint
+    && cp /usr/local/bin/rr /app/rr \
+    && cp /usr/local/bin/rr /app/vendor/bin/rr \
+    && chmod +x /app/rr /app/vendor/bin/rr /usr/local/bin/entrypoint
 
 # Dynamic Production Settings
 ENV APP_ENV=production \
