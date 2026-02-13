@@ -1,20 +1,29 @@
 # --- Stage 1: Build Backend (Composer) ---
-FROM composer:2 as composer
+FROM composer:2 AS composer
 
 WORKDIR /app
 COPY composer.json composer.lock ./
-# Install proper packages (including octane)
-RUN composer require laravel/octane spiral/roadrunner-cli --no-interaction --ignore-platform-reqs \
-    && composer install \
+
+# Install base dependencies first
+RUN composer install \
     --no-dev \
     --no-interaction \
     --prefer-dist \
     --ignore-platform-reqs \
-    --optimize-autoloader \
+    --no-autoloader \
     --no-scripts
 
+# Add Octane and RoadRunner
+RUN composer require laravel/octane spiral/roadrunner-cli \
+    --no-interaction \
+    --ignore-platform-reqs \
+    --no-scripts
+
+# Generate optimized autoloader
+RUN composer dump-autoload --optimize
+
 # --- Stage 2: Build Frontend (Node/Vite) ---
-FROM node:20-alpine as frontend
+FROM node:20-alpine AS frontend
 
 WORKDIR /app
 
