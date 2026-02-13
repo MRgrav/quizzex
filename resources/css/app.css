@@ -1,0 +1,43 @@
+@import '../../vendor/livewire/flux/dist/flux.css';
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer components {
+  .card {
+    @apply bg-white rounded-lg shadow-sm transition-all duration-200;
+  }
+
+  .card-hover {
+    @apply transition-all duration-200;
+  }
+
+  .card:hover,
+  .card-hover:hover {
+    @apply shadow-lg -translate-y-0.5 scale-[1.01];
+  }
+
+  .btn-primary {
+    @apply bg-primary-gradient text-white px-4 py-2 rounded-lg font-medium transition-all duration-200;
+  }
+
+  .btn-primary:hover {
+    @apply shadow-lg -translate-y-0.5 scale-[1.01];
+  }
+
+  .sidebar-link {
+    @apply flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-200 text-gray-700 hover:bg-gray-100;
+  }
+
+  .sidebar-link.active {
+    @apply bg-primary-gradient text-white;
+  }
+}
+
+@layer base {
+  body {
+    @apply bg-zinc-100 text-zinc-900;
+  }
+
+}
