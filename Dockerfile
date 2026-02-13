@@ -4,7 +4,8 @@ FROM composer:2 as composer
 WORKDIR /app
 COPY composer.json composer.lock ./
 # Install proper packages (including octane)
-RUN composer install \
+RUN composer require laravel/octane spiral/roadrunner-cli --no-interaction --ignore-platform-reqs \
+    && composer install \
     --no-dev \
     --no-interaction \
     --prefer-dist \

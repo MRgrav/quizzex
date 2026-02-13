@@ -34,6 +34,12 @@ echo "Starting Octane with server: $OCTANE_SERVER..."
 if [ "$OCTANE_SERVER" = "roadrunner" ]; then
     # Ensure rr binary is executable if it was just copied
     chmod +x /app/rr 2>/dev/null || true
+    
+    # Auto-configure if .rr.yaml missing
+    if [ ! -f .rr.yaml ]; then
+        echo "RoadRunner config missing. Installing Octane for RoadRunner..."
+        php artisan octane:install --server=roadrunner --no-interaction
+    fi
 fi
 
 exec php artisan octane:start --server="$OCTANE_SERVER" --host="$HOST" --port="$PORT"
