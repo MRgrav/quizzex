@@ -1,17 +1,4 @@
-# --- Stage 1: Build Frontend (Node/Vite) ---git inm
-FROM node:20-alpine as frontend
-
-WORKDIR /app
-COPY package.json package-lock.json ./
-RUN npm ci
-
-COPY vite.config.js tailwind.config.js postcss.config.js ./
-COPY resources ./resources
-COPY public ./public
-
-RUN npm run build
-
-# --- Stage 2: Build Backend (Composer) ---
+# --- Stage 1: Build Backend (Composer) ---
 FROM composer:2 as composer
 
 WORKDIR /app
@@ -24,6 +11,25 @@ RUN composer install \
     --ignore-platform-reqs \
     --optimize-autoloader \
     --no-scripts
+
+# --- Stage 2: Build Frontend (Node/Vite) ---
+FROM node:20-alpine as frontend
+
+WORKDIR /app
+
+# Copy Composer dependencies (needed for vendor resources like Livewire/Flux)
+COPY --from=composer /app/vendor/ ./vendor/
+
+COPY package.json package-lock.json ./
+RUN npm ci
+
+COPY vite.config.js tailwind.config.js postcss.config.js ./
+COPY resources ./resources
+COPY public ./public
+# Copy app folder for tailwind scanning
+COPY app ./app 
+
+RUN npm run build
 
 # --- Stage 3: Final Production Image ---
 FROM php:8.3-cli-alpine
