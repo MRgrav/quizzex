@@ -3,7 +3,7 @@ set -e
 
 # Default settings
 RUN_MIGRATIONS=${RUN_MIGRATIONS:-true}
-OCTANE_SERVER=${OCTANE_SERVER:-roadrunner}
+OCTANE_SERVER=${OCTANE_SERVER:-swoole}
 HOST=${HOST:-0.0.0.0}
 PORT=${PORT:-8000}
 

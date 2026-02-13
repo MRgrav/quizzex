@@ -13,13 +13,13 @@ RUN composer install \
     --no-autoloader \
     --no-scripts
 
-# Add Octane and RoadRunner
-RUN composer require laravel/octane spiral/roadrunner-cli \
+# Add Octane (Swoole is a PHP extension, not a composer package)
+RUN composer require laravel/octane \
     --no-interaction \
     --ignore-platform-reqs \
     --no-scripts
 
-# Generate optimized autoloader (--no-scripts: artisan isn't available in this stage)
+# Generate optimized autoloader
 RUN composer dump-autoload --optimize --no-scripts
 
 # --- Stage 2: Build Frontend (Node/Vite) ---
@@ -37,7 +37,7 @@ COPY vite.config.js tailwind.config.js postcss.config.js ./
 COPY resources ./resources
 COPY public ./public
 # Copy app folder for tailwind scanning
-COPY app ./app 
+COPY app ./app
 
 RUN npm run build
 
@@ -47,17 +47,15 @@ FROM php:8.4-cli-alpine
 # Use the highly optimized extension installer (fetches pre-built binaries)
 COPY --from=mlocati/php-extension-installer /usr/bin/install-php-extensions /usr/local/bin/
 
-# Install dependencies and extensions in ONE layer
-# sockets & pcntl are required for Octane (RoadRunner/Swoole)
-# pdo_pgsql & pgsql are for your PostgreSQL database
+# Install all extensions including Swoole (no compilation needed with this installer)
 RUN install-php-extensions \
+    swoole \
     pdo_mysql \
     pdo_pgsql \
     pgsql \
     pdo_sqlite \
     redis \
     pcntl \
-    sockets \
     bcmath \
     intl \
     zip \
@@ -65,13 +63,9 @@ RUN install-php-extensions \
     gd \
     exif
 
-# Install RoadRunner Binary (Zero compilation time)
-COPY --from=ghcr.io/roadrunner-server/roadrunner:2024.3 /usr/bin/rr /usr/local/bin/rr
-
 WORKDIR /app
 
-# Copy Configs
-COPY .dockerignore .
+# Copy entrypoint
 COPY docker/entrypoint.sh /usr/local/bin/entrypoint
 
 # Copy Built Assets & Code
@@ -80,18 +74,15 @@ COPY --from=composer /app/vendor ./vendor
 COPY . .
 
 # Setup Directories & Permissions
-# Place rr binary where Octane looks for it: ./rr AND vendor/bin/rr
-RUN mkdir -p storage/framework/{sessions,views,cache} storage/logs bootstrap/cache vendor/bin \
+RUN mkdir -p storage/framework/{sessions,views,cache} storage/logs bootstrap/cache \
     && chmod -R 775 storage bootstrap/cache \
-    && cp /usr/local/bin/rr /app/rr \
-    && cp /usr/local/bin/rr /app/vendor/bin/rr \
-    && chmod +x /app/rr /app/vendor/bin/rr /usr/local/bin/entrypoint
+    && chmod +x /usr/local/bin/entrypoint
 
 # Dynamic Production Settings
 ENV APP_ENV=production \
     APP_DEBUG=false \
     LOG_CHANNEL=stderr \
-    OCTANE_SERVER=roadrunner
+    OCTANE_SERVER=swoole
 
 EXPOSE 8000
 
