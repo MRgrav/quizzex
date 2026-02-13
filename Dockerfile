@@ -19,8 +19,8 @@ RUN composer require laravel/octane spiral/roadrunner-cli \
     --ignore-platform-reqs \
     --no-scripts
 
-# Generate optimized autoloader
-RUN composer dump-autoload --optimize
+# Generate optimized autoloader (--no-scripts: artisan isn't available in this stage)
+RUN composer dump-autoload --optimize --no-scripts
 
 # --- Stage 2: Build Frontend (Node/Vite) ---
 FROM node:20-alpine AS frontend
