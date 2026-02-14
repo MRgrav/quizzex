@@ -105,6 +105,32 @@ class Quiz extends Model
     }
 
     /**
+     * Check if quiz is upcoming (before availability window).
+     */
+    public function isUpcoming(): bool
+    {
+        if (!$this->start_time) {
+            return false;
+        }
+
+        $now = now();
+        return $now->lt($this->start_time);
+    }
+
+    /**
+     * Check if quiz is completed (after availability window).
+     */
+    public function isCompleted(): bool
+    {
+        if (!$this->end_time) {
+            return false;
+        }
+
+        $now = now();
+        return $now->gt($this->end_time);
+    }
+
+    /**
      * Check if quiz can be edited (not live and not manually locked).
      */
     public function canBeEdited(): bool

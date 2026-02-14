@@ -53,7 +53,7 @@
                         <span>Create Quiz</span>
                     </a>
 
-                    <a href="{{ route('organization.my-quizzes') }}"
+                    <a href="{{ route('organization.quizzes') }}"
                         class="sidebar-link {{ request()->routeIs('organization.my-quizzes*') ? 'active' : '' }}">
                         <flux:icon name="file-text" variant="mini" />
                         <span>My Quizzes</span>

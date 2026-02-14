@@ -13,18 +13,42 @@ use Livewire\WithPagination;
 class Index extends Component
 {
     use WithPagination;
-    public $quizzes;
     public $k = 1;
 
-    public function mount(Quiz $quiz)
+    public $search = '';
+    public $status = '';
+    public $type = '';
+
+    protected $queryString = [
+        'search' => ['except' => ''],
+        'status' => ['except' => ''],
+        'type' => ['except' => ''],
+    ];
+
+    public function updated($property)
     {
-        $this->quizzes = $quiz->all();
+        if (in_array($property, ['search', 'status', 'type'])) {
+            $this->resetPage();
+        }
     }
 
     public function render()
     {
+        $quizzes = Quiz::with('institute')
+            ->when($this->search, fn($q) => $q->where('title', 'like', '%' . $this->search . '%'))
+            ->when($this->status, fn($q) => $q->where('status', $this->status))
+            ->when($this->type, function ($q) {
+                if ($this->type === 'school') {
+                    $q->whereHas('institute', fn($iq) => $iq->where('type', 'school'));
+                } elseif ($this->type === 'college') {
+                    $q->whereHas('institute', fn($iq) => $iq->where('type', 'college'));
+                }
+            })
+            ->orderBy('created_at', 'desc')
+            ->paginate(10);
+
         return view('livewire.admin.all-quizzes.index', [
-            'quizzes' => $this->quizzes,
+            'quizzes' => $quizzes,
             'k' => $this->k
         ]);
     }

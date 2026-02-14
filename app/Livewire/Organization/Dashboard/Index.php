@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Organization\Dashboard;
 
+use App\Models\Quiz;
 use App\Models\User;
 use App\Services\InstituteService;
 use Livewire\Attributes\Layout;
@@ -40,9 +41,12 @@ class Index extends Component
         $quizService = app(\App\Services\QuizService::class);
         $quizStats = $quizService->getQuizStatsByInstitute($institute->id);
 
+        $recentQuizzes = Quiz::where('institute_id', $institute->id)->orderBy('created_at', 'desc')->paginate(5);
+
         return view('livewire.organization.dashboard.index', [
             'participants' => $participants,
             'quizStats' => $quizStats,
+            'recentQuizzes' => $recentQuizzes,
         ]);
     }
 }

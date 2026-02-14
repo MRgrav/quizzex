@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Admin;
 
+use App\Models\Quiz;
 use App\Services\InstituteService;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Title;
@@ -18,9 +19,12 @@ class Dashboard extends Component
         $quizService = app(\App\Services\QuizService::class);
         $quizStats = $quizService->getGlobalQuizStats();
 
+        $recentQuizzes = Quiz::orderBy('created_at', 'desc')->paginate(5);
+
         return view('livewire.admin.dashboard', [
             'institutes' => $institutes,
             'quizStats' => $quizStats,
+            'recentQuizzes' => $recentQuizzes,
         ]);
     }
 }

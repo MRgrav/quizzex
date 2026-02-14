@@ -57,4 +57,8 @@
             </flux:table.rows>
         </flux:table>
     </flux:card>
+
+    <div class="mt-4">
+        {{ $quizzes->links() }}
+    </div>
 </div>

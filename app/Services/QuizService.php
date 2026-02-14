@@ -18,7 +18,7 @@ class QuizService
 
     public function listAll()
     {
-        return Quiz::all();
+        return Quiz::get();
     }
 
     public function showQuiz($id)

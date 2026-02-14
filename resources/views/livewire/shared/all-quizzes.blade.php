@@ -46,9 +46,15 @@
                             {{ $quiz->created_at->format('M d, Y') }}
                         </flux:table.cell>
                         <flux:table.cell>
+                            @if(auth()->user()->role === \App\Models\User::ROLE_ADMIN)
                             <flux:button href="{{ route('admin.quizzes.view', $quiz->id) }}">
                                 View
                             </flux:button>
+                            @else
+                            <flux:button href="{{ route('organization.quizzes.view', $quiz->id) }}">
+                                View
+                            </flux:button>
+                            @endif
                         </flux:table.cell>
                     </flux:table.row>
                 @endforeach

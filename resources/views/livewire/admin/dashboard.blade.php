@@ -101,27 +101,24 @@
                 </div>
             </div>
             <div class="space-y-2">
-                <flux:card class="flex items-center justify-between border p-2 px-4">
-                    <div>
-                        <flux:heading size="lg" class="mb-1">Algebra Fundamentals</flux:heading>
-                        <flux:subheading size="base" class="mb-1">CSIR-NEIST (Jigyasa) • 20 questions</flux:subheading>
-                    </div>
-                    <flux:badge rounded color="green" class="bg-green-600/10">New</flux:badge>
-                </flux:card>
-                <flux:card class="flex items-center justify-between border p-2 px-4">
-                    <div>
-                        <flux:heading size="lg" class="mb-1">Algebra Fundamentals</flux:heading>
-                        <flux:subheading size="base" class="mb-1">CSIR-NEIST (Jigyasa) • 20 questions</flux:subheading>
-                    </div>
-                    <flux:badge rounded color="blue" class="bg-blue-600/10">Upcoming</flux:badge>
-                </flux:card>
-                <flux:card class="flex items-center justify-between border p-2 px-4">
-                    <div>
-                        <flux:heading size="lg" class="mb-1">Algebra Fundamentals</flux:heading>
-                        <flux:subheading size="base" class="mb-1">CSIR-NEIST (Jigyasa) • 20 questions</flux:subheading>
-                    </div>
-                    <flux:badge rounded color="zinc" class="bg-zinc-600/10">Completed</flux:badge>
-                </flux:card>
+                @foreach ($recentQuizzes as $quiz)
+                    <flux:card class="flex items-center justify-between border p-2 px-4">
+                        <div>
+                            <flux:heading size="lg" class="mb-1 capitalize">{{ $quiz->title }}</flux:heading>
+                            <flux:subheading size="base" class="mb-1">{{ $quiz->institute->name ?? 'CSIR-NEIST (Jigyasa)' }}
+                                • {{ $quiz->total_questions }} questions</flux:subheading>
+                        </div>
+                        @if ($quiz->isLive())
+                            <flux:badge rounded color="green" class="bg-green-600/10">Live</flux:badge>
+                        @elseif ($quiz->isUpcoming())
+                            <flux:badge rounded color="blue" class="bg-blue-600/10">Upcoming</flux:badge>
+                        @elseif ($quiz->isCompleted())
+                            <flux:badge rounded color="yellow" class="bg-yellow-600/10">Completed</flux:badge>
+                        @else
+                            <flux:badge rounded color="gray" class="bg-gray-600/10">Draft</flux:badge>
+                        @endif
+                    </flux:card>
+                @endforeach
             </div>
         </flux:card>
     </div>

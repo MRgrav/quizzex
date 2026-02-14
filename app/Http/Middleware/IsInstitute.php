@@ -19,7 +19,8 @@ class IsInstitute
         $user = $request->user();
 
         if (! $user || $user->role !== User::ROLE_INSTITUTE) {
-            abort(403, 'Forbidden');
+            return view('livewire.error.forbidden', ['message' => 'Not yet approved!']);
+            // abort(403, 'Forbidden');
         }
 
         return $next($request);

@@ -5,33 +5,6 @@
         <flux:card class="p-10 card-hover">
             <div class="flex items-center justify-between">
                 <div>
-                    <flux:text size="lg" class="mb-1">Total Organizations</flux:text>
-                    <flux:text size="3xl" class="font-bold text-zinc-900">{{ \App\Models\Institute::count() }}
-                    </flux:text>
-                </div>
-                <div class="rounded-xl p-3 bg-primary/10">
-                    <flux:icon name="building-2" class="text-primary" />
-                </div>
-            </div>
-        </flux:card>
-
-        <flux:card class="p-10 card-hover">
-            <div class="flex items-center justify-between">
-                <div>
-                    <flux:text size="lg" class="mb-1">Pending Approvals</flux:text>
-                    <flux:text size="3xl" class="font-bold text-zinc-900">
-                        {{ \App\Models\Institute::where('status', 'pending')->count() }}
-                    </flux:text>
-                </div>
-                <div class="rounded-xl p-3 bg-orange-500/10">
-                    <flux:icon name="clock" class="text-orange-500" />
-                </div>
-            </div>
-        </flux:card>
-
-        <flux:card class="p-10 card-hover">
-            <div class="flex items-center justify-between">
-                <div>
                     <flux:text size="lg" class="mb-1">Total Participants</flux:text>
                     <flux:text size="3xl" class="font-bold text-zinc-900">
                         {{ \App\Models\User::where('role', 'participant')->count() }}
@@ -39,6 +12,34 @@
                 </div>
                 <div class="rounded-xl p-3 bg-green-500/10">
                     <flux:icon name="users" class="text-green-500" />
+                </div>
+            </div>
+        </flux:card>
+
+        <flux:card class="p-10 card-hover">
+            <div class="flex items-center justify-between">
+                <div>
+                    <flux:text size="lg" class="mb-1">Quizzes Created</flux:text>
+                    <flux:text size="3xl" class="font-bold text-zinc-900">
+                        {{ \App\Models\Quiz::where('institute_id', auth()->user()->institute_id)->count() }}
+                    </flux:text>
+                </div>
+                <div class="rounded-xl p-3 bg-green-600/10">
+                    <flux:icon name="file-text" class="text-green-600" />
+                </div>
+            </div>
+        </flux:card>
+
+        <flux:card class="p-10 card-hover">
+            <div class="flex items-center justify-between">
+                <div>
+                    <flux:text size="lg" class="mb-1">Active Quizzes</flux:text>
+                    <flux:text size="3xl" class="font-bold text-zinc-900">
+                        {{ \App\Models\Quiz::where('institute_id', auth()->user()->institute_id)->where('status', \App\Models\Quiz::STATUS_ACTIVE)->count() }}
+                    </flux:text>
+                </div>
+                <div class="rounded-xl p-3 bg-orange-500/10">
+                    <flux:icon name="trending-up" class="text-orange-500" />
                 </div>
             </div>
         </flux:card>
@@ -101,27 +102,24 @@
                 </div>
             </div>
             <div class="space-y-2">
-                <flux:card class="flex items-center justify-between border p-2 px-4">
-                    <div>
-                        <flux:heading size="lg" class="mb-1">Algebra Fundamentals</flux:heading>
-                        <flux:subheading size="base" class="mb-1">CSIR-NEIST (Jigyasa) • 20 questions</flux:subheading>
-                    </div>
-                    <flux:badge rounded color="green" class="bg-green-600/10">New</flux:badge>
-                </flux:card>
-                <flux:card class="flex items-center justify-between border p-2 px-4">
-                    <div>
-                        <flux:heading size="lg" class="mb-1">Algebra Fundamentals</flux:heading>
-                        <flux:subheading size="base" class="mb-1">CSIR-NEIST (Jigyasa) • 20 questions</flux:subheading>
-                    </div>
-                    <flux:badge rounded color="blue" class="bg-blue-600/10">Upcoming</flux:badge>
-                </flux:card>
-                <flux:card class="flex items-center justify-between border p-2 px-4">
-                    <div>
-                        <flux:heading size="lg" class="mb-1">Algebra Fundamentals</flux:heading>
-                        <flux:subheading size="base" class="mb-1">CSIR-NEIST (Jigyasa) • 20 questions</flux:subheading>
-                    </div>
-                    <flux:badge rounded color="zinc" class="bg-zinc-600/10">Completed</flux:badge>
-                </flux:card>
+                @foreach ($recentQuizzes as $quiz)
+                    <flux:card class="flex items-center justify-between border p-2 px-4">
+                        <div>
+                            <flux:heading size="lg" class="mb-1 capitalize">{{ $quiz->title }}</flux:heading>
+                            <flux:subheading size="base" class="mb-1">{{ $quiz->institute->name ?? 'CSIR-NEIST (Jigyasa)' }}
+                                • {{ $quiz->total_questions }} questions</flux:subheading>
+                        </div>
+                        @if ($quiz->isLive())
+                            <flux:badge rounded color="green" class="bg-green-600/10">Live</flux:badge>
+                        @elseif ($quiz->status === 'active')
+                            <flux:badge rounded color="blue" class="bg-blue-600/10">Active</flux:badge>
+                        @elseif ($quiz->status === 'inactive')
+                            <flux:badge rounded color="red" class="bg-red-600/10">Inactive</flux:badge>
+                        @else
+                            <flux:badge rounded color="gray" class="bg-gray-600/10">Draft</flux:badge>
+                        @endif
+                    </flux:card>
+                @endforeach
             </div>
         </flux:card>
     </div>

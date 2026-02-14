@@ -4,6 +4,7 @@ namespace App\Livewire\Shared;
 
 use App\Models\Quiz;
 use App\Models\User;
+use Livewire\Attributes\Computed;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Title;
 use Livewire\Component;
@@ -19,6 +20,7 @@ class AllQuizzes extends Component
     public $quizzes;
     public $k = 1;
 
+    #[Computed()]
     public function mount(Quiz $quiz)
     {
         // Detect user role and set appropriate layout and redirect
@@ -32,7 +34,7 @@ class AllQuizzes extends Component
         if ($user->role === User::ROLE_INSTITUTE) {
             $this->quizzes = $quiz->where('institute_id', $user->institute_id)->get();
         } else {
-            $this->quizzes = $quiz->all();
+            $this->quizzes = $quiz->get();
         }
     }
 
