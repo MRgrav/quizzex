@@ -3,6 +3,7 @@
 namespace App\Livewire\Admin\Approvals;
 
 use App\Models\Institute;
+use Livewire\Attributes\Computed;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Title;
 use Livewire\Component;
@@ -16,10 +17,13 @@ class Index extends Component
     public $perPage = 15;
     public $totalPendings = 0;
 
+    #[Computed(persist: true, seconds: 900)]
     public function __construct()
     {
         $this->totalPendings = Institute::where('status', Institute::STATUS_PENDING)->count();
     }
+
+    #[Computed(persist: true, seconds: 900)]
     public function render()
     {
         $institutes = Institute::where('status', Institute::STATUS_PENDING)

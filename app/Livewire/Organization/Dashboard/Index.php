@@ -38,14 +38,19 @@ class Index extends Component
         ]);
 
         // 4. Get Quiz Statistics for this institute
-        $quizService = app(\App\Services\QuizService::class);
-        $quizStats = $quizService->getQuizStatsByInstitute($institute->id);
+        $stats = \Illuminate\Support\Facades\Cache::remember('org_dashboard_stats_' . $institute->id, 300, function () use ($institute) {
+            $quizService = app(\App\Services\QuizService::class);
+            return array_merge($quizService->getQuizStatsByInstitute($institute->id), [
+                'total_participants_global' => \App\Models\User::where('role', 'participant')->count(),
+                'total_quizzes_global' => \App\Models\Quiz::count(),
+            ]);
+        });
 
         $recentQuizzes = Quiz::where('institute_id', $institute->id)->orderBy('created_at', 'desc')->paginate(5);
 
         return view('livewire.organization.dashboard.index', [
             'participants' => $participants,
-            'quizStats' => $quizStats,
+            'stats' => $stats,
             'recentQuizzes' => $recentQuizzes,
         ]);
     }

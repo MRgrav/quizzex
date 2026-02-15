@@ -7,7 +7,7 @@
                 <div>
                     <flux:text size="lg" class="mb-1">Total Participants</flux:text>
                     <flux:text size="3xl" class="font-bold text-zinc-900">
-                        {{ \App\Models\User::where('role', 'participant')->count() }}
+                        {{ $stats['total_participants_global'] }}
                     </flux:text>
                 </div>
                 <div class="rounded-xl p-3 bg-green-500/10">
@@ -21,7 +21,7 @@
                 <div>
                     <flux:text size="lg" class="mb-1">Quizzes Created</flux:text>
                     <flux:text size="3xl" class="font-bold text-zinc-900">
-                        {{ \App\Models\Quiz::where('institute_id', auth()->user()->institute_id)->count() }}
+                        {{ $stats['total_quizzes'] }}
                     </flux:text>
                 </div>
                 <div class="rounded-xl p-3 bg-green-600/10">
@@ -35,7 +35,7 @@
                 <div>
                     <flux:text size="lg" class="mb-1">Active Quizzes</flux:text>
                     <flux:text size="3xl" class="font-bold text-zinc-900">
-                        {{ \App\Models\Quiz::where('institute_id', auth()->user()->institute_id)->where('status', \App\Models\Quiz::STATUS_ACTIVE)->count() }}
+                        {{ $stats['active_quizzes'] }}
                     </flux:text>
                 </div>
                 <div class="rounded-xl p-3 bg-orange-500/10">
@@ -48,7 +48,7 @@
             <div class="flex items-center justify-between">
                 <div>
                     <flux:text size="lg" class="mb-1">Total Quizzes</flux:text>
-                    <flux:text size="3xl" class="font-bold text-zinc-900">{{ \App\Models\Quiz::count() }}
+                    <flux:text size="3xl" class="font-bold text-zinc-900">{{ $stats['total_quizzes_global'] }}
                     </flux:text>
                 </div>
                 <div class="rounded-xl p-3 bg-blue-500/10">
