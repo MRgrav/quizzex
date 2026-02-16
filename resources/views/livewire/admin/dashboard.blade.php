@@ -79,9 +79,7 @@
                             <flux:subheading size="base" class="mb-1">{{ $institute->type }}</flux:subheading>
                         </div>
                         <div class="flex gap-2">
-                            <flux:button variant="primary" color="emerald">Approve
-                            </flux:button>
-                            <flux:button variant="primary" color="zinc">Reject</flux:button>
+                            <flux:button variant="primary" color="emerald">View</flux:button>
                         </div>
                     </flux:card>
                 @endforeach

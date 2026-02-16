@@ -23,6 +23,11 @@ class Index extends Component
         $this->totalPendings = Institute::where('status', Institute::STATUS_PENDING)->count();
     }
 
+    public function view($id)
+    {
+        $this->redirect(route('admin.organizations.view', $id));
+    }
+
     #[Computed(persist: true, seconds: 900)]
     public function render()
     {

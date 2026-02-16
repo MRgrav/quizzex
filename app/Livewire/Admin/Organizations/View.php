@@ -13,7 +13,7 @@ use Livewire\WithPagination;
 
 #[Layout("layouts.admin")]
 #[Title('Organizations')]
-class Index extends Component
+class View extends Component
 {
     use WithPagination;
 
@@ -28,22 +28,19 @@ class Index extends Component
 
     public $perPage = 15;
 
-    // Reset page when any filter changes
-    public function updated($property)
+    public $institute;
+
+    public function mount(Institute $institute)
     {
-        if (in_array($property, ['status', 'type', 'search'])) {
-            $this->resetPage();
-        }
+        $this->institute = $institute;
     }
 
     // app/Livewire/Admin/Organizations/Index.php
 
-    public function approve(InstituteService $service, $instituteId)
+    public function approve(InstituteService $service)
     {
-        // Best Practice: Fetch ID manually to avoid model binding issues in actions if the list changes
-        $institute = Institute::findOrFail($instituteId);
 
-        if ($institute->status !== Institute::STATUS_PENDING) {
+        if ($this->institute->status !== Institute::STATUS_PENDING) {
             // You generally shouldn't reach here if the button is hidden correctly
             return;
         }
@@ -51,7 +48,7 @@ class Index extends Component
         try {
             DB::beginTransaction();
 
-            $service->approveInstitute($institute);
+            $service->approveInstitute($this->institute);
 
             DB::commit();
 
@@ -65,12 +62,10 @@ class Index extends Component
         }
     }
 
-    public function reject(InstituteService $service, $instituteId)
+    public function reject(InstituteService $service)
     {
-        // Best Practice: Fetch ID manually to avoid model binding issues in actions if the list changes
-        $institute = Institute::findOrFail($instituteId);
 
-        if ($institute->status !== Institute::STATUS_PENDING) {
+        if ($this->institute->status !== Institute::STATUS_PENDING) {
             // You generally shouldn't reach here if the button is hidden correctly
             return;
         }
@@ -78,7 +73,7 @@ class Index extends Component
         try {
             DB::beginTransaction();
 
-            $service->rejectInstitute($institute);
+            $service->rejectInstitute($this->institute);
 
             DB::commit();
 
@@ -92,21 +87,15 @@ class Index extends Component
         }
     }
 
-    public function view($instituteId)
+    public function back()
     {
-        return redirect(route('admin.organizations.view', $instituteId));
+        $this->redirect(route('admin.organizations'));
     }
 
-    public function render(InstituteService $service)
+    public function render()
     {
-
-        $institutes = $service->getPaginated([
-            'status' => $this->status ?: null,
-            'type' => $this->type ?: null,
-            'search' => $this->search ?: null,
-        ], $this->perPage);
-        return view('livewire.admin.organizations.index', [
-            'institutes' => $institutes
+        return view('livewire.admin.organizations.view', [
+            'institute' => $this->institute
         ]);
 
     }

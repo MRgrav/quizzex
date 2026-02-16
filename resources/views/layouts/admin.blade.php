@@ -77,7 +77,7 @@
                     </a>
 
                     <a href="{{ route('admin.quizzes') }}"
-                        class="sidebar-link {{ request()->routeIs('admin.all-quizzes*') ? 'active' : '' }}">
+                        class="sidebar-link {{ request()->routeIs('admin.quizzes*') ? 'active' : '' }}">
                         <flux:icon variant="mini" name="file-text" />
                         <span>All Quizzes</span>
                     </a>
@@ -88,8 +88,8 @@
                         <span>Create Quiz</span>
                     </a>
 
-                    <a href="{{ route('admin.all-results') }}"
-                        class="sidebar-link {{ request()->routeIs('admin.all-results*') ? 'active' : '' }}">
+                    <a href="{{ route('admin.results') }}"
+                        class="sidebar-link {{ request()->routeIs('admin.results*') ? 'active' : '' }}">
                         <flux:icon variant="mini" name="trophy" />
                         <span>All Results</span>
                     </a>

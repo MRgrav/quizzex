@@ -11,7 +11,8 @@
                 <flux:field>
                     <div class="mb-3 flex justify-between">
                         <flux:label>Password</flux:label>
-                        <flux:link href="#" variant="subtle" class="text-sm">Forgot password?</flux:link>
+                        <flux:link href="{{ route('password.request') }}" variant="subtle" class="text-sm">Forgot
+                            password?</flux:link>
                     </div>
 
                     <flux:input wire:model="password" type="password" placeholder="••••••••" />
@@ -23,7 +24,8 @@
             </div>
 
             <div class="space-y-2">
-                <flux:button type="submit" variant="primary" class="w-full bg-primary bg-primary/70 text-white">Sign In
+                <flux:button type="submit" variant="primary"
+                    class="w-full bg-primary bg-primary/70 text-white hover:bg-primary/90">Sign In
                 </flux:button>
                 <flux:button href="{{ route('auth.register') }}" variant="ghost" class="w-full">Sign up for an institute
                     account</flux:button>

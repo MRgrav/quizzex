@@ -74,7 +74,7 @@
                                 Question {{ $index + 1 }}
                             </flux:badge>
                             <flux:text class="text-lg font-semibold text-zinc-900">
-                                {{ $question->question_text }}
+                                {!! $question->question_text !!}
                             </flux:text>
                             <flux:text class="text-sm text-zinc-500 mt-1">
                                 {{ $question->points }} {{ $question->points === 1 ? 'point' : 'points' }}
@@ -108,7 +108,7 @@
                             <div class="mt-3 p-3 bg-blue-50 rounded-lg">
                                 <flux:text class="text-sm font-semibold text-blue-900 mb-1">Explanation:</flux:text>
                                 <flux:text class="text-blue-800">
-                                    {{ $question->explanation }}
+                                    {!! $question->explanation !!}
                                 </flux:text>
                             </div>
                         @endif
@@ -125,10 +125,10 @@
 
     <!-- Action Buttons -->
     <div class="mt-8 flex gap-4">
-        <flux:button href="{{ route('participant.quizzes') }}" variant="primary">
+        <flux:button href="{{ route(auth()->user()->role.'.quizzes') }}" variant="primary">
             ← Back to Quizzes
         </flux:button>
-        <flux:button href="{{ route('participant.results') }}" variant="ghost">
+        <flux:button href="{{ route(auth()->user()->role.'.results') }}" variant="ghost">
             View All Results
         </flux:button>
     </div>

@@ -49,10 +49,16 @@ class CreateQuiz extends Component
                 $data['institute_id'] = $user->institute_id;
             }
 
-            $service->createQuiz($data);
+            $quiz = $service->createQuiz($data);
 
-            session()->flash('message', 'Quiz created successfully.');
-            return $this->redirect(route($this->redirectRoute), navigate: true);
+            session()->flash('message', 'Quiz created successfully. Now add questions.');
+
+            // Redirect to question management page
+            $questionRoute = $user->role === User::ROLE_INSTITUTE
+                ? 'organization.quizzes.questions'
+                : 'admin.quizzes.questions';
+
+            return $this->redirect(route($questionRoute, $quiz), navigate: true);
 
         } catch (\Exception $e) {
             \Log::error('Quiz Creation Failed: ' . $e->getMessage(), [

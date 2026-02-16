@@ -30,10 +30,8 @@
                         <flux:text>Registered: {{ $institute->created_at }}</flux:text>
                     </div>
                     <div class="flex gap-2">
-                        <flux:button variant="primary" icon="check" class="bg-green-600 text-white hover:bg-green-700/70">
-                            Approve
+                        <flux:button wire:click="view({{ $institute->id }})" variant="primary" icon="eye" color="zinc">View
                         </flux:button>
-                        <flux:button variant="primary" icon="x-mark" color="zinc">Reject</flux:button>
                     </div>
                 </flux:card>
             @endforeach

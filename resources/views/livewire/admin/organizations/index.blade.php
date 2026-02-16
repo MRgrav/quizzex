@@ -42,7 +42,9 @@
                                 <flux:badge size="sm">{{ ucfirst($institute->type) }}</flux:badge>
                             </flux:table.cell>
                             <flux:table.cell>
-                                <flux:badge color="{{ $institute->status === 'active' ? 'green' : 'yellow' }}" size="sm">
+                                <flux:badge
+                                    color="{{ $institute->status === \App\Models\Institute::STATUS_APPROVED ? 'green' : 'yellow' }}"
+                                    size="sm">
                                     {{ ucfirst($institute->status) }}
                                 </flux:badge>
                             </flux:table.cell>
@@ -50,26 +52,9 @@
                                 {{ $institute->created_at->format('M d, Y') }}
                             </flux:table.cell>
                             <flux:table.cell>
-                                @if ($institute->status === \App\Models\Institute::STATUS_PENDING)
-                                    <flux:button.group>
-                                        <flux:button wire:click="approve({{ $institute->id }})"
-                                            wire:confirm="Are you sure you want to approve {{ $institute->name }}?"
-                                            variant="primary" class="bg-green-600 hover:bg-green-700 text-white" icon="check">
-                                            <span wire:loading.remove target="approve({{ $institute->id }})">Approve</span>
-                                            <span wire:loading target="approve({{ $institute->id }})">Saving...</span>
-                                        </flux:button>
-                                        <flux:button wire:click="reject({{ $institute->id }})"
-                                            wire:confirm="Are you sure you want to reject {{ $institute->name }}?"
-                                            variant="danger" icon="x-mark"><span wire:loading.remove
-                                                target="approve({{ $institute->id }})">Reject</span>
-                                            <span wire:loading target="approve({{ $institute->id }})">Saving...</span>
-                                        </flux:button>
-                                    </flux:button.group>
-                                @else
-                                    <span class="text-green-600 text-sm font-medium flex items-center gap-1">
-                                        <flux:icon.check-circle class="size-4" /> Approved
-                                    </span>
-                                @endif
+                                <flux:button wire:click="view({{ $institute->id }})" variant="primary" icon="eye">
+                                    View
+                                </flux:button>
                             </flux:table.cell>
                     </flux:table.row>
                 @endforeach

@@ -165,210 +165,35 @@
     </flux:card>
 
     {{-- Questions Card --}}
-    <flux:card class="mb-6">
-        <div class="flex items-center gap-2 mb-6">
-            <flux:icon name="question-mark-circle" class="text-primary" />
-            <flux:heading size="xl">Questions ({{ $quiz->questions->count() }})</flux:heading>
+    <flux:card>
+        <div class="flex items-center justify-between mb-6">
+            <div class="flex items-center gap-2">
+                <flux:icon name="question-mark-circle" class="text-primary" />
+                <flux:heading size="xl">Questions ({{ $quiz->questions->count() }})</flux:heading>
+            </div>
+            <flux:button
+                href="{{ auth()->user()->role === 'admin' ? route('admin.quizzes.questions', $quiz) : route('organization.quizzes.questions', $quiz) }}"
+                variant="primary" icon="pencil">
+                Manage Questions
+            </flux:button>
         </div>
 
         @if ($quiz->questions->count() > 0)
-            <div class="space-y-4">
-                @foreach ($quiz->questions as $index => $question)
-                    <flux:card class="border">
-                        <div class="flex justify-between items-start mb-3">
-                            <div class="flex-1">
-                                <div class="flex items-center gap-2 mb-2">
-                                    <flux:badge>Question {{ $index + 1 }}</flux:badge>
-                                    <flux:badge color="blue">{{ $question->points }}
-                                        {{ $question->points === 1 ? 'point' : 'points' }}
-                                    </flux:badge>
-                                    <flux:badge color="purple" class="capitalize">
-                                        {{ str_replace('_', ' ', $question->question_type) }}
-                                    </flux:badge>
-                                </div>
-                                <div class="prose max-w-none">
-                                    {!! $question->question_text !!}
-                                </div>
-                            </div>
-                            <flux:button wire:click="deleteQuestion({{ $question->id }})" variant="ghost" size="sm"
-                                wire:confirm="Are you sure you want to delete this question?">
-                                <flux:icon name="trash" class="w-4 h-4 text-red-600" />
-                            </flux:button>
-                        </div>
-
-                        @if ($question->explanation)
-                            <div class="mb-3 p-3 bg-blue-50 rounded-lg">
-                                <flux:subheading class="text-blue-700 mb-1">Explanation</flux:subheading>
-                                <flux:text class="text-blue-600">{{ $question->explanation }}</flux:text>
-                            </div>
-                        @endif
-
-                        {{-- Options --}}
-                        @if ($question->options->count() > 0)
-                            <div class="mb-3">
-                                <div class="flex items-center justify-between mb-2">
-                                    <flux:subheading>Answer Options</flux:subheading>
-                                    <flux:button icon="{{ $showAnswers[$question->id] ?? false ? 'eye-slash' : 'eye' }}"
-                                        wire:click="toggleAnswers({{ $question->id }})" variant="ghost" size="sm">
-                                        {{ $showAnswers[$question->id] ?? false ? 'Hide' : 'Show' }} Answers
-                                    </flux:button>
-                                </div>
-
-                                <div class="grid grid-cols-1 lg:grid-cols-2 gap-2">
-                                    @foreach ($question->options as $optionIndex => $option)
-                                        <div
-                                            class="flex items-center gap-2 p-2 rounded {{ ($showAnswers[$question->id] ?? false) && $option->is_correct ? 'bg-green-100 border border-green-200' : 'bg-zinc-100' }}">
-                                            <span class="font-semibold text-zinc-600">{{ chr(65 + $optionIndex) }}.</span>
-                                            <span class="flex-1">{{ $option->option_text }}</span>
-                                            @if ($showAnswers[$question->id] ?? false)
-                                                @if ($option->is_correct)
-                                                    <flux:badge color="green">
-                                                        <flux:icon name="check" class="w-3 h-3" />
-                                                        Correct
-                                                    </flux:badge>
-                                                @endif
-                                            @endif
-                                        </div>
-                                    @endforeach
-                                </div>
-                            </div>
-                        @endif
-                    </flux:card>
-                @endforeach
-            </div>
+            <flux:text class="text-zinc-600">
+                This quiz has {{ $quiz->questions->count() }} question{{ $quiz->questions->count() === 1 ? '' : 's' }}
+                totaling {{ $quiz->total_points }} point{{ $quiz->total_points === 1 ? '' : 's' }}.
+                Click "Manage Questions" to add, edit, or remove questions.
+            </flux:text>
         @else
             <div class="text-center py-8 text-zinc-500">
                 <flux:icon name="question-mark-circle" class="w-12 h-12 mx-auto mb-2 opacity-50" />
-                <flux:text>No questions added yet. Add your first question below.</flux:text>
+                <flux:text class="mb-4">No questions added yet.</flux:text>
+                <flux:button
+                    href="{{ auth()->user()->role === 'admin' ? route('admin.quizzes.questions', $quiz) : route('organization.quizzes.questions', $quiz) }}"
+                    variant="primary" icon="plus">
+                    Add Questions
+                </flux:button>
             </div>
         @endif
     </flux:card>
-
-    {{-- Add Question Form --}}
-    <flux:card>
-        <div class="flex items-center gap-2 mb-6">
-            <flux:icon name="plus-circle" class="text-primary" />
-            <flux:heading size="xl">Add New Question</flux:heading>
-        </div>
-
-        <div class="space-y-4">
-            <div>
-                <flux:label>Question Text</flux:label>
-                <div wire:ignore>
-                    <input id="trix-question-input" type="hidden" wire:model="newQuestion.question_text">
-                    <trix-editor input="trix-question-input" class="trix-content"></trix-editor>
-                </div>
-                @error('newQuestion.question_text') <flux:text class="text-red-600 text-sm">{{ $message }}</flux:text>
-                @enderror
-            </div>
-
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div>
-                    <flux:label>Question Type</flux:label>
-                    <flux:select wire:model.live="newQuestion.question_type">
-                        <flux:select.option value="multiple_choice">Multiple Choice</flux:select.option>
-                        <flux:select.option value="true_false">True/False</flux:select.option>
-                        <!-- <flux:select.option value="short_answer">Short Answer</flux:select.option> -->
-                    </flux:select>
-                    @error('newQuestion.question_type') <flux:text class="text-red-600 text-sm">{{ $message }}
-                    </flux:text> @enderror
-                </div>
-
-                <div>
-                    <flux:label>Points</flux:label>
-                    <flux:input type="number" wire:model="newQuestion.points" min="1" />
-                    @error('newQuestion.points') <flux:text class="text-red-600 text-sm">{{ $message }}</flux:text>
-                    @enderror
-                </div>
-            </div>
-
-            <div>
-                <flux:label>Explanation (Optional)</flux:label>
-                <flux:textarea wire:model="newQuestion.explanation" placeholder="Provide an explanation for the answer"
-                    rows="2" />
-                @error('newQuestion.explanation') <flux:text class="text-red-600 text-sm">{{ $message }}</flux:text>
-                @enderror
-            </div>
-
-            {{-- Options --}}
-            @if($newQuestion['question_type'])
-                <div>
-                    <div class="flex items-center justify-between mb-3">
-                        <flux:label>Answer Options</flux:label>
-                        @if($newQuestion['question_type'] === 'multiple_choice')
-                            <flux:button icon="plus" wire:click="addOption" variant="ghost" size="sm">
-                                Add Option
-                            </flux:button>
-                        @endif
-                    </div>
-
-                    <div class="space-y-3">
-                        @foreach ($newQuestion['options'] as $index => $option)
-                            <div class="flex items-center gap-2">
-                                <span class="font-semibold text-zinc-600 w-6">{{ chr(65 + $index) }}.</span>
-
-                                @if($newQuestion['question_type'] === 'true_false')
-                                    {{-- For True/False, show read-only options --}}
-                                    <flux:input wire:model="newQuestion.options.{{ $index }}.option_text" class="flex-1" disabled />
-                                @else
-                                    {{-- For MCQ, allow editing --}}
-                                    <flux:input wire:model="newQuestion.options.{{ $index }}.option_text" placeholder="Option text"
-                                        class="flex-1" />
-                                @endif
-
-                                <label
-                                    class="flex items-center gap-2 px-3 py-2 bg-zinc-50 rounded-lg cursor-pointer hover:bg-zinc-100">
-                                    @if($newQuestion['question_type'] === 'true_false')
-                                        <input type="radio" wire:click="selectTrueFalseAnswer({{ $index }})"
-                                            @if($option['is_correct']) checked @endif name="true_false_answer"
-                                            class="rounded-full border-zinc-300 text-green-600 focus:ring-green-500" />
-                                    @else
-                                        <input type="checkbox" wire:model="newQuestion.options.{{ $index }}.is_correct"
-                                            class="rounded border-zinc-300 text-green-600 focus:ring-green-500" />
-                                    @endif
-                                    <span class="text-sm text-zinc-700">Correct</span>
-                                </label>
-
-                                @if ($newQuestion['question_type'] === 'multiple_choice' && count($newQuestion['options']) > 2)
-                                    <flux:button wire:click="removeOption({{ $index }})" variant="ghost" size="sm">
-                                        <flux:icon name="trash" class="w-4 h-4 text-red-600" />
-                                    </flux:button>
-                                @endif
-                            </div>
-                            @error("newQuestion.options.{$index}.option_text") <flux:text class="text-red-600 text-sm ml-8">
-                                {{ $message }}
-                            </flux:text> @enderror
-                        @endforeach
-                    </div>
-                </div>
-            @endif
-
-            <div class="flex justify-end gap-2 pt-4 border-t">
-                <flux:button icon="plus" wire:click="addQuestion" variant="primary">
-                    Add Question
-                </flux:button>
-            </div>
-        </div>
-    </flux:card>
 </div>
-
-@push('scripts')
-    <script>
-        document.addEventListener('livewire:initialized', () => {
-            // Trix editor integration with Livewire
-            const trixEditor = document.querySelector('trix-editor');
-
-            if (trixEditor) {
-                // Update Livewire when Trix content changes
-                trixEditor.addEventListener('trix-change', function (e) {
-                    @this.set('newQuestion.question_text', e.target.value);
-                });
-
-                // Listen for Livewire updates to reset the editor
-                Livewire.on('question-added', () => {
-                    trixEditor.editor.loadHTML('');
-                });
-            }
-        });
-    </script>
-@endpush
