@@ -41,7 +41,7 @@ class ManageQuestions extends Component
             $this->showAnswers[$question->id] = false;
         }
 
-        if (auth()->user()->role == User::ROLE_ADMIN) {
+        if (auth()->user()->role == \App\Models\User::ROLE_ADMIN) {
             $this->layout = 'layouts.admin';
         } else {
             $this->layout = 'layouts.organization';
