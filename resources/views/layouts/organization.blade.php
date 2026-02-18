@@ -7,6 +7,30 @@
     <title>{{ $title ?? 'Institute Dashboard' }}</title>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     @fluxAppearance
+
+    {{-- Trix Editor Styles --}}
+    <link rel="stylesheet" type="text/css" href="https://unpkg.com/trix@2.0.8/dist/trix.css">
+    <script type="text/javascript" src="https://unpkg.com/trix@2.0.8/dist/trix.umd.min.js"></script>
+
+    <style>
+        trix-toolbar .trix-button-group--file-tools {
+            display: none;
+        }
+
+        .trix-content {
+            min-height: 150px;
+            border: 1px solid #d4d4d8;
+            border-radius: 0.5rem;
+        }
+
+        .trix-content:focus-within {
+            border-color: #3b82f6;
+            ring: 2px;
+            ring-color: #3b82f6;
+        }
+    </style>
+
+    @stack('styles')
 </head>
 
 <body class="bg-zinc-50">
@@ -106,6 +130,7 @@
         </div>
     </div>
     @fluxScripts
+    @stack('scripts')
 </body>
 
 </html>
