@@ -30,6 +30,7 @@
             @endif
 
             <flux:select wire:model="form.status" label="Status">
+                <flux:select.option value="">Select Status</flux:select.option>
                 @foreach(\App\Models\Quiz::STATUSES as $status)
                     <flux:select.option value="{{ $status }}">{{ ucfirst($status) }}</flux:select.option>
                 @endforeach

@@ -7,7 +7,7 @@
                 <div>
                     <flux:text size="lg" class="mb-1">Total Participants</flux:text>
                     <flux:text size="3xl" class="font-bold text-zinc-900">
-                        {{ $stats['total_participants_global'] }}
+                        {{ $stats['total_participants'] }}
                     </flux:text>
                 </div>
                 <div class="rounded-xl p-3 bg-green-500/10">
@@ -47,12 +47,12 @@
         <flux:card class="p-10 card-hover">
             <div class="flex items-center justify-between">
                 <div>
-                    <flux:text size="lg" class="mb-1">Total Quizzes</flux:text>
-                    <flux:text size="3xl" class="font-bold text-zinc-900">{{ $stats['total_quizzes_global'] }}
+                    <flux:text size="lg" class="mb-1">Total Attempts</flux:text>
+                    <flux:text size="3xl" class="font-bold text-zinc-900">{{ $stats['quiz_attempts'] }}
                     </flux:text>
                 </div>
                 <div class="rounded-xl p-3 bg-blue-500/10">
-                    <flux:icon name="file-text" class="text-primary" />
+                    <flux:icon name="clipboard-check" class="text-primary" />
                 </div>
             </div>
         </flux:card>
@@ -63,10 +63,10 @@
             <div class="flex items-center justify-between mb-6">
                 <div class="flex items-center gap-2">
                     <flux:icon name="users" class="text-primary" />
-                    <flux:heading size="xl">Participants</flux:heading>
+                    <flux:heading size="xl">Recent Participants</flux:heading>
                 </div>
                 <div>
-                    <a href="/admin/institutes" class="flex items-center gap-2">
+                    <a href={{ route('organization.participants') }} class="flex items-center gap-2">
                         <flux:text size="base" class="font-bold text-zinc-900">View All</flux:text>
                         <flux:icon name="arrow-right" />
                     </a>
@@ -74,15 +74,10 @@
             </div>
             <div class="space-y-2">
                 @foreach ($participants as $participant)
-                    <flux:card class="flex items-center justify-between border p-2 px-4">
-                        <div>
+                    <flux:card class=" border p-2 px-4">
+                        <div class="flex justify-between items-center">
                             <flux:heading size="lg" class="mb-1 capitalize">{{ $participant->name }}</flux:heading>
                             <flux:subheading size="base" class="mb-1">{{ $participant->email }}</flux:subheading>
-                        </div>
-                        <div class="flex gap-2">
-                            <flux:button variant="primary" color="emerald">Approve
-                            </flux:button>
-                            <flux:button variant="primary" color="zinc">Reject</flux:button>
                         </div>
                     </flux:card>
                 @endforeach
@@ -95,7 +90,7 @@
                     <flux:heading size="xl">Recent Quizzes</flux:heading>
                 </div>
                 <div>
-                    <a href="/admin/institutes" class="flex items-center gap-2">
+                    <a href={{ route('organization.quizzes') }} class="flex items-center gap-2">
                         <flux:text size="base" class="font-bold text-zinc-900">View All</flux:text>
                         <flux:icon name="arrow-right" />
                     </a>

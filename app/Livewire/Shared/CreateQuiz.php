@@ -24,7 +24,7 @@ class CreateQuiz extends Component
 
         if ($user->role === User::ROLE_INSTITUTE) {
             $this->layout = 'layouts.organization';
-            $this->redirectRoute = 'organization.my-quizzes';
+            $this->redirectRoute = 'organization.quizzes';
         }
     }
 

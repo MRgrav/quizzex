@@ -44,10 +44,10 @@
             <div>
                 <flux:label>Question Text</flux:label>
                 <div wire:ignore>
-                    <input id="trix-question-input" type="hidden" wire:model="newQuestion.question_text">
+                    <input id="trix-question-input" type="hidden" wire:model="newQuestion.title">
                     <trix-editor input="trix-question-input" class="trix-content"></trix-editor>
                 </div>
-                @error('newQuestion.question_text') <flux:text class="text-red-600 text-sm">{{ $message }}</flux:text>
+                @error('newQuestion.title') <flux:text class="text-red-600 text-sm">{{ $message }}</flux:text>
                 @enderror
             </div>
 

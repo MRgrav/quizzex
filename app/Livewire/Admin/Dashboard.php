@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Admin;
 
+use App\Models\Institute;
 use App\Models\Quiz;
 use App\Services\InstituteService;
 use Livewire\Attributes\Computed;
@@ -13,10 +14,15 @@ use Livewire\Component;
 #[Title('Admin Dashboard')]
 class Dashboard extends Component
 {
+    public function viewPending($id)
+    {
+        $this->redirect(route('admin.organizations.view', $id));
+    }
+
     #[Computed(persist: true, seconds: 1200)]
     public function render(InstituteService $service)
     {
-        $institutes = $service->getPaginated(5);
+        // $institutes = $service->getPaginated(5);
 
         // $stats = \Illuminate\Support\Facades\Cache::remember('admin_dashboard_stats', 600, function () {
         //     $quizService = app(\App\Services\QuizService::class);
@@ -26,6 +32,10 @@ class Dashboard extends Component
         //         'total_participants' => \App\Models\User::where('role', 'participant')->count(),
         //     ]);
         // });
+        $institutes = Institute::where('status', Institute::STATUS_PENDING)
+            ->with('user:id,name,email,created_at')
+            ->orderBy('created_at', 'desc')
+            ->paginate(5);
 
         $quizService = app(\App\Services\QuizService::class);
         $stats = array_merge($quizService->getGlobalQuizStats(), [

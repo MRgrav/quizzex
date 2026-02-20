@@ -22,7 +22,8 @@ class QuizResult extends Component
     {
         // Verify this attempt belongs to the authenticated user
         if (auth()->user()->role != User::ROLE_ADMIN) {
-            if ($quizAttempt->participant_id !== auth()->id() || $quizAttempt->quiz->organization_id !== auth()->user()->organization_id) {
+            // dd($quizAttempt->quiz->organization_id == auth()->user()->organization_id);
+            if ($quizAttempt->participant_id === auth()->id() || $quizAttempt->quiz->organization_id !== auth()->user()->organization_id) {
                 abort(403, 'Unauthorized access to quiz result.');
             }
         }

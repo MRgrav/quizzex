@@ -65,7 +65,7 @@
                     <flux:heading size="xl">Pending Approvals</flux:heading>
                 </div>
                 <div>
-                    <a href="/admin/institutes" class="flex items-center gap-2">
+                    <a href="/admin/approvals" class="flex items-center gap-2">
                         <flux:text size="base" class="font-bold text-zinc-900">View All</flux:text>
                         <flux:icon name="arrow-right" />
                     </a>
@@ -79,7 +79,9 @@
                             <flux:subheading size="base" class="mb-1">{{ $institute->type }}</flux:subheading>
                         </div>
                         <div class="flex gap-2">
-                            <flux:button variant="primary" color="emerald">View</flux:button>
+                            <flux:button wire:click="viewPending({{ $institute->id }})" icon="eye" variant="primary"
+                                color="emerald">
+                                View</flux:button>
                         </div>
                     </flux:card>
                 @endforeach
@@ -92,7 +94,7 @@
                     <flux:heading size="xl">Recent Quizzes</flux:heading>
                 </div>
                 <div>
-                    <a href="/admin/institutes" class="flex items-center gap-2">
+                    <a href="/admin/quizzes" class="flex items-center gap-2">
                         <flux:text size="base" class="font-bold text-zinc-900">View All</flux:text>
                         <flux:icon name="arrow-right" />
                     </a>

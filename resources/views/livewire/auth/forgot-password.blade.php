@@ -1,4 +1,4 @@
-<div class="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100 px-4">
+<div class="flex items-center justify-center px-4">
     <div class="w-full max-w-md">
         <flux:card class="p-8">
             <div class="text-center mb-8">
@@ -23,7 +23,8 @@
                         <flux:error name="email" />
                     </flux:field>
 
-                    <flux:button type="submit" variant="primary" class="w-full">
+                    <flux:button type="submit" variant="primary"
+                        class="text-white bg-primary/90 hover:bg-primary/70 w-full">
                         Send Reset Link
                     </flux:button>
                 </div>

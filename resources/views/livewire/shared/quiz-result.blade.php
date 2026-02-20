@@ -125,10 +125,10 @@
 
     <!-- Action Buttons -->
     <div class="mt-8 flex gap-4">
-        <flux:button href="{{ route(auth()->user()->role.'.quizzes') }}" variant="primary">
+        <flux:button href="{{ route((auth()->user()->role === 'institute' ? 'organization' : auth()->user()->role) . '.quizzes') }}" variant="primary">
             ← Back to Quizzes
         </flux:button>
-        <flux:button href="{{ route(auth()->user()->role.'.results') }}" variant="ghost">
+        <flux:button href="{{ route((auth()->user()->role === 'institute' ? 'organization' : auth()->user()->role) . '.results') }}" variant="ghost">
             View All Results
         </flux:button>
     </div>

@@ -78,7 +78,7 @@
                     </a>
 
                     <a href="{{ route('organization.quizzes') }}"
-                        class="sidebar-link {{ request()->routeIs('organization.my-quizzes*') ? 'active' : '' }}">
+                        class="sidebar-link {{ request()->routeIs('organization.quizzes*') ? 'active' : '' }}">
                         <flux:icon name="file-text" variant="mini" />
                         <span>My Quizzes</span>
                     </a>
@@ -116,13 +116,14 @@
                     </div>
                     <div>
                         @if (request()->routeIs('organization.dashboard'))
-                            <flux:button variant="primary" icon="circle-plus"
-                                class="bg-primary-gradient text-white shadow hover:shadow-lg">Add Quiz</flux:button>
+                            <flux:button href="{{ route('organization.quizzes.create') }}" variant="primary"
+                                icon="circle-plus" class="bg-primary-gradient text-white shadow hover:shadow-lg">Add Quiz
+                            </flux:button>
                         @endif
-                        @if (request()->routeIs('organization.participants'))
+                        <!-- @if (request()->routeIs('organization.participants'))
                             <flux:button variant="primary" icon="circle-plus"
                                 class="bg-primary-gradient text-white shadow hover:shadow-lg">Add Participant</flux:button>
-                        @endif
+                        @endif -->
                     </div>
                 </header>
                 {{ $slot }}
