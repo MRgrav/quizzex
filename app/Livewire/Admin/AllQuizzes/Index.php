@@ -25,6 +25,17 @@ class Index extends Component
         'type' => ['except' => ''],
     ];
 
+    public function sort(string $column): void
+    {
+        if ($this->sortBy === $column) {
+            $this->sortDir = $this->sortDir === 'asc' ? 'desc' : 'asc';
+        } else {
+            $this->sortBy = $column;
+            $this->sortDir = 'asc';
+        }
+        $this->resetPage();
+    }
+
     public function updated($property)
     {
         if (in_array($property, ['search', 'status', 'type'])) {

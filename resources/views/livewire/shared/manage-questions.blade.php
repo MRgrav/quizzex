@@ -228,7 +228,7 @@
                 // Update Livewire when Trix content changes
                 trixEditor.addEventListener('trix-change', function (e) {
                     const hiddenInput = document.querySelector('#trix-question-input');
-                    @this.set('newQuestion.question_text', hiddenInput.value);
+                    @this.set('newQuestion.title', hiddenInput.value);
                 });
 
                 // Listen for Livewire updates to reset the editor

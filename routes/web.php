@@ -28,7 +28,7 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
     Route::get('/organizations/{institute}', \App\Livewire\Admin\Organizations\View::class)->name('organizations.view');
     Route::get('/approvals', \App\Livewire\Admin\Approvals\Index::class)->name('approvals');
     Route::get('/quizzes', \App\Livewire\Shared\AllQuizzes::class)->name('quizzes');
-    Route::get('/quizzes/create', \App\Livewire\Shared\CreateQuiz::class)->name('quizzes.create');
+    Route::get('/quizzes/create', \App\Livewire\Shared\CreateQuiz::class)->name('quiz.create');
     Route::get('/quizzes/{quiz}', \App\Livewire\Shared\ViewQuiz::class)->name('quizzes.view');
     Route::get('/quizzes/{quiz}/questions', \App\Livewire\Shared\ManageQuestions::class)->name('quizzes.questions');
     Route::get('/results', \App\Livewire\Admin\AllResults\Index::class)->name('results');
@@ -40,7 +40,7 @@ Route::middleware(['auth'])->prefix('organization')->name('organization.')->grou
     Route::get('/dashboard', \App\Livewire\Organization\Dashboard\Index::class)->name('dashboard');
     Route::get('/participants', \App\Livewire\Organization\Participants\Index::class)->name('participants');
     Route::get('/quizzes', \App\Livewire\Shared\AllQuizzes::class)->name('quizzes');
-    Route::get('/quizzes/create', \App\Livewire\Shared\CreateQuiz::class)->name('quizzes.create');
+    Route::get('/quizzes/create', \App\Livewire\Shared\CreateQuiz::class)->name('quiz.create');
     Route::get('/quizzes/{quiz}', \App\Livewire\Shared\ViewQuiz::class)->name('quizzes.view');
     Route::get('/quizzes/{quiz}/questions', \App\Livewire\Shared\ManageQuestions::class)->name('quizzes.questions');
     Route::get('/results', \App\Livewire\Organization\Results\Index::class)->name('results');

@@ -18,7 +18,7 @@ class ManageQuestions extends Component
 
     // New question form
     public $newQuestion = [
-        'question_text' => '',
+        'title' => '',
         'question_type' => 'multiple_choice',
         'points' => 1,
         'explanation' => '',
@@ -83,7 +83,7 @@ class ManageQuestions extends Component
 
         // Base validation
         $this->validate([
-            'newQuestion.question_text' => 'required|string',
+            'newQuestion.title' => 'required|string',
             'newQuestion.question_type' => 'required|in:multiple_choice,true_false',
             'newQuestion.points' => 'required|integer|min:1',
             'newQuestion.explanation' => 'nullable|string',
@@ -122,7 +122,7 @@ class ManageQuestions extends Component
         // Create the question
         $question = Question::create([
             'quiz_id' => $this->quiz->id,
-            'question_text' => $this->newQuestion['question_text'],
+            'question_text' => $this->newQuestion['title'],
             'question_type' => $this->newQuestion['question_type'],
             'points' => $this->newQuestion['points'],
             'explanation' => $this->newQuestion['explanation'],
@@ -188,7 +188,7 @@ class ManageQuestions extends Component
     private function resetQuestionForm()
     {
         $this->newQuestion = [
-            'question_text' => '',
+            'title' => '',
             'question_type' => 'multiple_choice',
             'points' => 1,
             'explanation' => '',

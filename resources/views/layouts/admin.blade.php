@@ -82,8 +82,8 @@
                         <span>All Quizzes</span>
                     </a>
 
-                    <a href="{{ route('admin.quizzes.create') }}"
-                        class="sidebar-link {{ request()->routeIs('admin.quizzes.create*') ? 'active' : '' }}">
+                    <a href="{{ route('admin.quiz.create') }}"
+                        class="sidebar-link {{ request()->routeIs('admin.quiz.create') ? 'active' : '' }}">
                         <flux:icon variant="mini" name="circle-plus" />
                         <span>Create Quiz</span>
                     </a>

@@ -58,7 +58,7 @@ class CreateQuiz extends Component
                 ? 'organization.quizzes.questions'
                 : 'admin.quizzes.questions';
 
-            return $this->redirect(route($questionRoute, $quiz), navigate: true);
+            return $this->redirect(route($questionRoute, $quiz));
 
         } catch (\Exception $e) {
             \Log::error('Quiz Creation Failed: ' . $e->getMessage(), [

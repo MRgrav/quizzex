@@ -71,8 +71,8 @@
                         <span>Participants</span>
                     </a>
 
-                    <a href="{{ route('organization.quizzes.create') }}"
-                        class="sidebar-link {{ request()->routeIs('organization.quizzes.create*') ? 'active' : '' }}">
+                    <a href="{{ route('organization.quiz.create') }}"
+                        class="sidebar-link {{ request()->routeIs('organization.quiz.create') ? 'active' : '' }}">
                         <flux:icon name="circle-plus" variant="mini" />
                         <span>Create Quiz</span>
                     </a>
@@ -116,7 +116,7 @@
                     </div>
                     <div>
                         @if (request()->routeIs('organization.dashboard'))
-                            <flux:button href="{{ route('organization.quizzes.create') }}" variant="primary"
+                            <flux:button href="{{ route('organization.quiz.create') }}" variant="primary"
                                 icon="circle-plus" class="bg-primary-gradient text-white shadow hover:shadow-lg">Add Quiz
                             </flux:button>
                         @endif
